@@ -52,20 +52,20 @@ var myTexture2 = myTextureLoader.load(require('@/assets/2.jpeg')); // 旋转球�
 var material2 = new THREE.MeshPhongMaterial({map: myTexture2,side:THREE.DoubleSide}); // 创建光亮的材质
 var mesh2 = new THREE.Mesh(geometry2, material2);
 
-// 生辰外围粒子
+
 const particles = new THREE.Geometry();
-      const particleMaterial = new THREE.PointsMaterial({ // 点模型
-      color: 0xffffff, // 颜色
-      size: 2, // 粒子大小
-      map: new THREE.TextureLoader().load(require('@/assets/particle.png')), // 外围粒子贴图
+      const particleMaterial = new THREE.PointsMaterial({ 
+      color: 0xffffff, 
+      size: 2, 
+      map: new THREE.TextureLoader().load(require('@/assets/particle.png')), 
       blending: THREE.AdditiveBlending,
       transparent: true,
       depthWrite: false
       });
-      const radius = 80; // 半径 下面几个不推荐调 容易错
+      const radius = 80; 
       const nbPoints = 4000;
       const step = 2 / nbPoints;
-      const turns = 60; // 绕y轴旋转的次数
+      const turns = 60; 
       for (let i = -1; i <= 1; i += step) {
         const phi = Math.acos(i);
         const theta = (2 * turns * phi) % (2 * Math.PI);
@@ -75,7 +75,7 @@ const particles = new THREE.Geometry();
         particle.y = particle.initY = Math.cos(phi) * radius;
         particles.vertices.push(particle);
       }
-      // 创建粒子系统
+
       const particleSystem = new THREE.Points(particles, particleMaterial);
 
 export default {
@@ -89,7 +89,7 @@ export default {
     };
   },
   methods: {
-    // 初始化
+
     init() {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setClearAlpha(0);
@@ -98,7 +98,7 @@ export default {
       scene = new THREE.Scene();
 
       {
-        // 背景贴图
+
         scene.background = new THREE.CubeTextureLoader().load([
           require('@/assets/skybox/right.jpg'),
           require('@/assets/skybox/left.jpg'),
@@ -108,7 +108,7 @@ export default {
           require('@/assets/skybox/back.jpg')
         ]);
       }
-      // 相机
+
       camera = new THREE.PerspectiveCamera(
         75,
         window.innerWidth / window.innerHeight,
@@ -118,21 +118,21 @@ export default {
       camera.position.z = this.positionZ;
       window.addEventListener("resize", this.onWindowResize, false);
 
-      this.audioLines(20, this.N); // 添加音频线
-      this.audioBars(25, this.N / 2); // 添加音频柱子
+      this.audioLines(20, this.N); 
+      this.audioBars(25, this.N / 2); 
 
-      this.addParticle(); // 外围例子和球实例化
+      this.addParticle(); 
 
       TriangleGroup = new THREE.Group();
       setInterval(this.addTriangle.bind(this), 500);
       scene.add(TriangleGroup);
 
-      // 加载音频 start
+      //  start
       let listener = new THREE.AudioListener(); // 监听者
       audio = new THREE.Audio(listener); // 非位置音频对象
       let audioUrl = require("../static/audio.mp3");
       this.audioLoad(audioUrl);
-      // 加载音频 end
+      //  end
 
       this.initLight();
       this.initControls();
@@ -275,7 +275,7 @@ export default {
       );
       return triangle;
     },
-    // 音频柱子
+
     audioBars(radius, countData) {
       barGroup = new THREE.Group();
       let R = radius;
@@ -301,9 +301,9 @@ export default {
       }
       scene.add(barGroup);
     },
-    // 辉光
+
     initBloomPass() {
-      // 辉光
+    
       let params = {
         exposure: 0.5,
         bloomStrength: 1,
@@ -329,15 +329,15 @@ export default {
       composer.addPass(bloomPass);
       composer.addPass(copyShader);
 
-      // 辉光 end
+      //  end
     },
-    // 动态渲染 通过API获取音频频率存入数组arr
+
     animate() {
       mesh2.rotation.y += 0.006;
       stats.update();
       controls.update();
       if (analyser) {
-        // 获得频率数据N个
+
         let arr = analyser.getFrequencyData();
         if (barGroup) {
           barGroup.rotation.z += 0.002;
@@ -408,36 +408,24 @@ export default {
       renderer.setSize(window.innerWidth, window.innerHeight);
       composer.setSize(window.innerWidth, window.innerHeight);
     },
-    // 鼠标控制
+
     initControls() {
       controls = new OrbitControls(camera, renderer.domElement);
-      // 如果使用animate方法时，将此函数删除
       //controls.addEventListener( 'change', render );
-      // 使动画循环使用时阻尼或自转 意思是否有惯性
       controls.enableDamping = true;
-      //动态阻尼系数 就是鼠标拖拽旋转灵敏度
       //controls.dampingFactor = 0.25;
-      //是否可以缩放
       controls.enableZoom = true;
-      //是否自动旋转
       controls.autoRotate = gui.rotate;
-      //设置相机距离原点的最远距离
       controls.minDistance = 1;
-      //设置相机距离原点的最远距离
       controls.maxDistance = 200;
-      //是否开启右键拖拽
       controls.enablePan = false;
     },
-    // FPS显示 这个删了也行 感觉没啥用
     initStats() {
       stats = new Stats();
       document.body.appendChild(stats.dom);
     },
-    // GUI控制显示
     initGui() {
-      //声明一个保存需求修改的相关数据的对象
       let datGui = new GUI();
-      //将设置属性添加到gui当中，gui.add(对象，属性，最小值，最大值）
       datGui.add(gui, "R", 0, 255);
       datGui.add(gui, "G", 0, 255);
       datGui.add(gui, "B", 0, 255);
@@ -469,35 +457,31 @@ export default {
         });
       });
     },
-    // 环境光和平行光
     initLight() {
       scene.add(new THREE.AmbientLight(0x444444));
       let light = new THREE.PointLight(0xffffff);
       light.position.set(80, 100, 50);
-      //告诉平行光需要开启阴影投射
       light.castShadow = true;
       scene.add(light);
     },
-    //  音频加载播放
+    
     audioLoad(url) {
       let _that = this;
 
-      let audioLoader = new THREE.AudioLoader(); // 音频加载器
+      let audioLoader = new THREE.AudioLoader(); 
       audioLoader.load(url, function(AudioBuffer) {
         if (audio.isPlaying) {
           audio.stop();
           audio.setBuffer();
         }
-        audio.setBuffer(AudioBuffer); // 音频缓冲区对象关联到音频对象audio
-        audio.setLoop(true); //是否循环
-        audio.setVolume(1); //音量
-        audio.play(); //播放
-        // 音频分析器和音频绑定，可以实时采集音频时域数据进行快速傅里叶变换
+        audio.setBuffer(AudioBuffer); 
+        audio.setLoop(true); 
+        audio.setVolume(1); 
+        audio.play(); 
         analyser = new THREE.AudioAnalyser(audio, _that.N * 2);
         frequencyData = analyser.getFrequencyData();
       });
     },
-    // 选择音频
     getAudio() {
       let _that = this;
       let objFile = this.$refs.fileId;
