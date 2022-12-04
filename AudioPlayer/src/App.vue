@@ -127,8 +127,8 @@ export default {
       scene.add(TriangleGroup);
 
       //  start
-      let listener = new THREE.AudioListener(); // 监听者
-      audio = new THREE.Audio(listener); // 非位置音频对象
+      let listener = new THREE.AudioListener(); 
+      audio = new THREE.Audio(listener); 
       let audioUrl = require("../static/audio.mp3");
       this.audioLoad(audioUrl);
       //  end
