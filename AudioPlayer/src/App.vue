@@ -24,32 +24,31 @@ import { randomRange } from "./components/randomRange";
 import { Triangle } from "./components/Triangle";
 
 let renderer, scene, camera, controls, stats, composer;
-// 默认配置
 let gui = {
-  R: 198, // 音柱颜色
-  G: 107, // 音柱颜色
-  B: 49,  // 音柱颜色
-  TrianglesBgColor: 0x03a9f4, // 三角漂移装饰物背景颜色
-  TrianglesLineColor: 0x03a9f4, // 三角漂移装饰物线条颜色
-  lineColor: 0x6bffff, // 音柱内环颜色
-  rotate: true // 是否开始自动旋转
+  R: 198, 
+  G: 107, 
+  B: 49,  
+  TrianglesBgColor: 0x03a9f4, 
+  TrianglesLineColor: 0x03a9f4, 
+  lineColor: 0x6bffff, 
+  rotate: true 
 };
-let audio, analyser; // 音频
+let audio, analyser; 
 let linesGroup,
   outLine,
   inLine,
   barLine = [],
-  barNodes; // 线
-let barGroup; // 柱子
+  barNodes; 
+let barGroup; 
 let Triangles = [],
   TriangleGroup, frequencyData;
 const skipFrequencies = 0;
 
-// 生成球体
-var geometry2 = new THREE.SphereGeometry(15,100,100 ); // 生成几何体（半径，竖直高度，水平高度）
-var myTextureLoader = new THREE.TextureLoader(); // 贴图加载
-var myTexture2 = myTextureLoader.load(require('@/assets/2.jpeg')); // 旋转球贴图加载
-var material2 = new THREE.MeshPhongMaterial({map: myTexture2,side:THREE.DoubleSide}); // 创建光亮的材质
+
+var geometry2 = new THREE.SphereGeometry(15,100,100 ); 
+var myTextureLoader = new THREE.TextureLoader(); 
+var myTexture2 = myTextureLoader.load(require('@/assets/2.jpeg')); 
+var material2 = new THREE.MeshPhongMaterial({map: myTexture2,side:THREE.DoubleSide}); 
 var mesh2 = new THREE.Mesh(geometry2, material2);
 
 
